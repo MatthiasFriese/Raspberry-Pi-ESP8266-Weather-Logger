@@ -14,7 +14,7 @@ html
       var items = !{data}
       items.map(function(e){e.x=new Date(e.x); return e;})
 
-      
+
       var groups = new vis.DataSet();
       groups.add({
         id: 'humid',
@@ -28,6 +28,19 @@ html
       groups.add({
         id: 'temp',
         content: "Temperature",
+        options: {
+          yAxisOrientation: 'left',
+          drawPoints: {
+            style: 'square'
+          },
+          shaded: {
+            orientation: 'bottom' // top, bottom
+          }
+      }});
+
+      groups.add({
+        id: 'preasure',
+        content: "Preasure",
         options: {
           yAxisOrientation: 'left',
           drawPoints: {
