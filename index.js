@@ -8,7 +8,7 @@ var SavePassword = 'tutorials-raspberrypi.de';
 var connection = mysql.createConnection({
     host     : 'localhost',
     user     : 'root',
-    password : 'your-password',
+    password : 'password',
     database : 'weather_station',
     debug    :  false,
     connectionLimit : 100
@@ -28,19 +28,22 @@ app.use(bodyParser.json());
 // Visualize
 app.get('/', function(req, res) {
 
-
-
+    var firstData;
+    var secondData;
     // get data from database
     connection.query('SELECT date x, humidity y, sender_id, \'humidity\' `group` FROM temperature ' +
-                     'UNION SELECT date x, temperature y, sender_id, \'temperature\' `group` FROM temperature ' +
-                     'UNION SELECT date x, preasure y, sender_id, \'preasure\' `group` FROM temperature', function (error, results, fields) {
+                     'UNION SELECT date x, temperature y, sender_id, \'temperature\' `group` FROM temperature', function (error, results, fields) {
         if (error) throw error;
-        results = JSON.stringify(results);
-
-        res.render('index', { data: results });
+        firstData = JSON.stringify(results);
     });
 
-})
+    connection.query('SELECT date x, preasure y, sender_id, \'preasure\' `group` FROM temperature', function (error, results, fields) {
+        if (error) throw error;
+        secondData = JSON.stringify(results);
+
+        res.render('index', { data: firstData, data2: secondData });
+    });
+});
 
 // Send data
 app.post('/esp8266_trigger', function(req, res){

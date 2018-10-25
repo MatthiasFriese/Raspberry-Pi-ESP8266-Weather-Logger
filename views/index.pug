@@ -9,6 +9,7 @@ html
       }
   body
     div#visualization
+    div#visualization2
     script.
       var container = document.getElementById('visualization');
       var items = !{data}
@@ -38,9 +39,21 @@ html
           }
       }});
 
-      groups.add({
+      var dataset = new vis.DataSet(items);
+
+      var options = {
+        legend: {enabled: true},
+      };
+      var graph2d = new vis.Graph2d(container, dataset, groups, options);
+
+      var container2 = document.getElementById('visualization2');
+      var items2 = !{data2}
+      items2.map(function(e){e.x=new Date(e.x); return e;})
+
+      var groups2 = new vis.DataSet();
+      groups2.add({
         id: 'preasure',
-        content: "Preasure",
+        content: "preasure",
         options: {
           yAxisOrientation: 'left',
           drawPoints: {
@@ -50,9 +63,10 @@ html
             orientation: 'bottom' // top, bottom
           }
       }});
-      var dataset = new vis.DataSet(items);
 
-      var options = {
+      var dataset2 = new vis.DataSet(items2);
+
+      var options2 = {
         legend: {enabled: true},
       };
-      var graph2d = new vis.Graph2d(container, dataset, groups, options);
+      var graph2d = new vis.Graph2d(container2, dataset2, groups2, options2);
