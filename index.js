@@ -31,9 +31,9 @@ app.get('/', function(req, res) {
 
 
     // get data from database
-    connection.query('SELECT datum x, humidity y, sender_id, \'humidity\' `group` FROM temperature ' +
-                     'UNION SELECT datum x, temp y, sender_id, \'temp\' `group` FROM temperature' +
-                     'UNION SELECT datum x, preasure y, sender_id, \'preasure\' `group` FROM temperature', function (error, results, fields) {
+    connection.query('SELECT date x, humidity y, sender_id, \'humidity\' `group` FROM temperature ' +
+                     'UNION SELECT date x, temp y, sender_id, \'temperature\' `group` FROM temperature' +
+                     'UNION SELECT date x, preasure y, sender_id, \'preasure\' `group` FROM temperature', function (error, results, fields) {
         if (error) throw error;
         results = JSON.stringify(results);
 
