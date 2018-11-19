@@ -6,8 +6,9 @@ var bodyParser  = require('body-parser');
 var SavePassword = 'tutorials-raspberrypi.de';
 
 var connection = mysql.createConnection({
-    host     : 'localhost',
-    user     : 'root',
+    //host     : '192.168.178.45',
+    host     : '127.0.0.1',
+    user     : 'nodejs',
     password : 'password',
     database : 'weather_station',
     debug    :  false,
@@ -94,6 +95,24 @@ app.post('/esp8266_trigger', function(req, res){
     });
 
 
+});
+
+app.get('/last_value', function(req, res) {
+    var temperature, humidity, preasure;
+
+    var query = connection.query('SELECT * from temperature ORDER BY date desc LIMIT 1;', function (error, results, fields) {
+      if (error) {
+          res.json({"code" : 403, "status" : "Error in connection database"});
+          return;
+      }
+      res.json({"code": 200,
+                "date": results[0].date,
+                "temperature": results[0].temperature,
+                "humidity": results[0].humidity,
+                "preasure": results[0].preasure,
+                "sender_id": results[0].sender_id
+              });
+    });
 });
 
 app.listen(app.get('port'));
