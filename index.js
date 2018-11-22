@@ -123,4 +123,13 @@ app.get('/last_value', function(req, res) {
     });
 });
 
+app.get('/pressure_history', function(req, res) {
+  connection.query('SELECT date, preasure FROM temperature WHERE sender_id="5C:CF:7F:07:19:C3" AND date >= now() - INTERVAL 1 DAY', function (error, results, fields) {
+      if (error) throw error;
+
+      res.json({"code": 200,
+                "items": JSON.stringify(results)});
+  });
+});
+
 app.listen(app.get('port'));
