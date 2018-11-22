@@ -98,11 +98,19 @@ app.post('/esp8266_trigger', function(req, res){
 });
 
 app.get('/last_value', function(req, res) {
-    var temperature, humidity, preasure;
+    var sender_id, temperature, humidity, preasure;
 
-    var query = connection.query('SELECT * from temperature ORDER BY date desc LIMIT 1;', function (error, results, fields) {
+    if (req.query.sender_id == null) {
+      res.json({"code" : 400, "error": "sender_id Value missing"});
+      return;
+    } else {
+      sender_id = req.query.sender_id;
+    }
+
+    var query = connection.query('SELECT * from temperature WHERE sender_id=\"'+sender_id+'\" ORDER BY date desc LIMIT 1;', function (error, results, fields) {
       if (error) {
           res.json({"code" : 403, "status" : "Error in connection database"});
+          console.log("error: "+ error);
           return;
       }
       res.json({"code": 200,
