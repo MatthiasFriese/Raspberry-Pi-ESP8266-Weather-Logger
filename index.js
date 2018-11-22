@@ -128,7 +128,7 @@ app.get('/pressure_history', function(req, res) {
       if (error) throw error;
 
       res.json({"code": 200,
-                "items": JSON.stringify(results)});
+                "items": results});
   });
 });
 
