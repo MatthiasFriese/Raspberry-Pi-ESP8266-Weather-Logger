@@ -132,4 +132,38 @@ app.get('/pressure_history', function(req, res) {
   });
 });
 
+app.get('/temperature_history', function(req, res) {
+    var sender_id, temperature, humidity, preasure;
+
+    if (req.query.sender_id == null) {
+      res.json({"code" : 400, "error": "sender_id Value missing"});
+      return;
+    } else {
+      sender_id = req.query.sender_id;
+    }
+
+    var query = connection.query('SELECT * from temperature WHERE sender_id=\"'+sender_id+'\" AND date >  NOW() - INTERVAL 1 WEEK ORDER BY date asc;', function (error, results, fields) {
+      if (error) {
+          res.json({"code" : 403, "status" : "Error in connection database"});
+          console.log("error: "+ error);
+          return;
+      }
+
+      var weatherObjects = [];
+      results.forEach(function(result) {
+        var weatherObject = {}
+        weatherObject.date = result.date;
+        weatherObject.temperature = result.temperature;
+        weatherObject.humidity = result.humidity;
+        weatherObject.preasure = result.preasure;
+        weatherObject.sender_id = result.sender_id;
+        weatherObjects.push(weatherObject);
+      });
+
+      res.json({"code": 200,
+                "items" : weatherObjects
+              });
+    });
+});
+
 app.listen(app.get('port'));
